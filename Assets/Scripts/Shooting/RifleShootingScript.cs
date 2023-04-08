@@ -1,16 +1,18 @@
 using System.Collections.Generic;
+using Opsive.UltimateCharacterController.Items.Actions;
 using UnityEngine;
 
 namespace Shooting
 {
     public class RifleShootingScript : MonoBehaviour
     {
-        public Transform firePoint;
-        public GameObject bulletPrefab;
-        public float bulletSpeed = 20f;
-        public float fireRate = 0.2f;
-        public int poolSize = 20;
-        public int maxAmmo = 10;
+        [SerializeField] private Transform firePoint;
+        [SerializeField] private GameObject bulletPrefab;
+        [SerializeField] private float bulletSpeed = 20f;
+        [SerializeField] private float fireRate = 0.2f;
+        [SerializeField] private int poolSize = 20;
+        [SerializeField] private int maxAmmo = 10;
+        [SerializeField] private GameObject muzzleFlashPrefab;
 
         private List<GameObject> bulletPool;
         private AmmoManager ammoManager;
@@ -22,7 +24,7 @@ namespace Shooting
             bulletPool = new List<GameObject>();
             for (int i = 0; i < poolSize; i++)
             {
-                GameObject bullet = Instantiate(bulletPrefab);
+                GameObject bullet = Instantiate(bulletPrefab, transform, true);
                 bullet.SetActive(false);
                 bulletPool.Add(bullet);
             }
@@ -41,6 +43,7 @@ namespace Shooting
             if (Input.GetKey(KeyCode.R) && ammoManager.GetCurrentAmmo() < maxAmmo)
             {
                 ammoManager.Reload();
+                ResetBullets();
             }
         }
 
@@ -52,13 +55,31 @@ namespace Shooting
             {
                 poolIndex = 0;
             }
-
+            
+            GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
+            Destroy(muzzleFlash, 0.1f);
+            
             bullet.transform.position = firePoint.position;
             bullet.transform.rotation = firePoint.rotation;
             bullet.SetActive(true);
 
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.velocity = firePoint.right * bulletSpeed;
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            rb.velocity = firePoint.forward * bulletSpeed;
+            
+            bullet.GetComponent<Collider>().enabled = true;
+            bullet.GetComponent<BulletScript>().OnBulletHit.AddListener(() => { bullet.SetActive(false); });
+        }
+
+        void ResetBullets()
+        {
+            foreach (GameObject bullet in bulletPool)
+            {
+                if (bullet.activeSelf)
+                {
+                    bullet.SetActive(false);
+                }
+            }
+            poolIndex = 0;
         }
     }
 }

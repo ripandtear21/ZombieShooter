@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5460761515149785357}
+  - component: {fileID: 2841836619129893576}
   - component: {fileID: 5460761515149785353}
   - component: {fileID: 5460761515149785358}
   - component: {fileID: 5460761515149785359}
@@ -35,6 +36,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2841836619129893576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5460761515149785362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd158f57946a7f647941a03d5142bbdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  bulletSpeed: 20
+  fireRate: 0.2
+  poolSize: 20
+  maxAmmo: 10
 --- !u!114 &5460761515149785353
 MonoBehaviour:
   m_ObjectHideFlags: 0
