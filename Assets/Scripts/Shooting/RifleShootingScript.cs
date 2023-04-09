@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using Opsive.UltimateCharacterController.Items.Actions;
 using UnityEngine;
 
 namespace Shooting
@@ -12,24 +12,29 @@ namespace Shooting
         [SerializeField] private float fireRate = 0.2f;
         [SerializeField] private int poolSize = 20;
         [SerializeField] private int maxAmmo = 10;
-        [SerializeField] private GameObject muzzleFlashPrefab;
-
+        [SerializeField] private int ammmoQuantity = 150;
+        public AudioSource audioSource;
+        public AudioClip shootSound;
+        public AudioClip reloadSound;
+        
         private List<GameObject> bulletPool;
         private AmmoManager ammoManager;
         private float nextFireTime = 0f;
         private int poolIndex = 0;
+        private bool isReloading = false;
+        private float reloadTime = 2.3f;
 
         void Start()
         { 
             bulletPool = new List<GameObject>();
             for (int i = 0; i < poolSize; i++)
             {
-                GameObject bullet = Instantiate(bulletPrefab, transform, true);
+                GameObject bullet = Instantiate(bulletPrefab);
                 bullet.SetActive(false);
                 bulletPool.Add(bullet);
             }
-
             ammoManager = new AmmoManager(maxAmmo);
+            AmmoManager.AddAmmo(ammmoQuantity);
         }
 
         void Update()
@@ -42,8 +47,7 @@ namespace Shooting
 
             if (Input.GetKey(KeyCode.R) && ammoManager.GetCurrentAmmo() < maxAmmo)
             {
-                ammoManager.Reload();
-                ResetBullets();
+                StartCoroutine(ReloadCoroutine());
             }
         }
 
@@ -55,10 +59,11 @@ namespace Shooting
             {
                 poolIndex = 0;
             }
-            
-            GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
-            Destroy(muzzleFlash, 0.1f);
-            
+            if (audioSource && shootSound)
+            {
+                audioSource.PlayOneShot(shootSound);
+            }
+
             bullet.transform.position = firePoint.position;
             bullet.transform.rotation = firePoint.rotation;
             bullet.SetActive(true);
@@ -80,6 +85,24 @@ namespace Shooting
                 }
             }
             poolIndex = 0;
+        }
+        IEnumerator ReloadCoroutine()
+        {
+            if (audioSource && reloadSound)
+            {
+                audioSource.clip = reloadSound;
+                audioSource.Play();
+            }
+            yield return new WaitForSeconds(reloadTime); 
+            Reload();
+            isReloading = false;
+        }
+        void Reload()
+        {
+            ammoManager.Reload();
+            AmmoManager.ReduceAmmo(poolIndex);
+            ammmoQuantity = AmmoManager.TotalAmmo;
+            ResetBullets();
         }
     }
 }

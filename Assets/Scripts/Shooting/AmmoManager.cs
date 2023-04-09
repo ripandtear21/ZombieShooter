@@ -4,11 +4,23 @@ namespace Shooting
     {
         private int maxAmmo;
         private int currentAmmo;
+        private static int totalAmmo;
+
+        public static int TotalAmmo => totalAmmo;
 
         public AmmoManager(int maxAmmo)
         {
             this.maxAmmo = maxAmmo;
             currentAmmo = maxAmmo;
+        }
+        public static void ReduceAmmo(int amount)
+        {
+            totalAmmo -= amount;
+        }
+
+        public static void AddAmmo(int amount)
+        {
+            totalAmmo += amount;
         }
 
         public int GetCurrentAmmo()
