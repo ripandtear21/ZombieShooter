@@ -1,24 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+using EnemyScripts;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BulletScript : MonoBehaviour
+namespace Shooting
 {
-    public UnityEvent OnBulletHit;
-    [SerializeField] private int damagePerShot = 30;
-
-    void OnCollisionEnter(Collision collision)
+    public class BulletScript : MonoBehaviour
     {
-        OnBulletHit.Invoke();
-        if (collision.gameObject.CompareTag("Zombie"))
+        public UnityEvent OnBulletHit;
+        [SerializeField] private int damagePerShot = 30;
+
+        void OnCollisionEnter(Collision collision)
         {
-            ZombieScript zombie = collision.gameObject.GetComponent<ZombieScript>();
-            if (zombie != null)
+            OnBulletHit.Invoke();
+            if (collision.gameObject.CompareTag("Zombie"))
             {
-                zombie.TakeDamage(damagePerShot);
+                ZombieScript zombie = collision.gameObject.GetComponent<ZombieScript>();
+                if (zombie != null)
+                {
+                    zombie.TakeDamage(damagePerShot);
+                }
             }
         }
-    }
     
+    }
 }

@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class EventManager : MonoBehaviour
+namespace Managers
 {
-    // Start is called before the first frame update
-    void Start()
+    public class EventManager : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public static Action<float> OnZombieDamage;
+    
+        public static void ZombieDamage(float damage)
+        {
+            OnZombieDamage?.Invoke(damage);
+        }
     }
 }

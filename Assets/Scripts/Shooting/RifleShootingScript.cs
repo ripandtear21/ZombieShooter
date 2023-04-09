@@ -8,6 +8,7 @@ namespace Shooting
     {
         [SerializeField] private Transform firePoint;
         [SerializeField] private GameObject bulletPrefab;
+        [SerializeField] private GameObject muzzleFlashPrefab;
         [SerializeField] private float bulletSpeed = 20f;
         [SerializeField] private float fireRate = 0.2f;
         [SerializeField] private int poolSize = 20;
@@ -40,7 +41,7 @@ namespace Shooting
 
         void Update()
         {
-            if (Time.time > nextFireTime && Input.GetButtonDown("Fire1") && ammoManager.Fire())
+            if (Time.time > nextFireTime && Input.GetButtonDown("Fire1") && ammoManager.Fire() && !isReloading)
             {
                 Shoot();
                 nextFireTime = Time.time + fireRate;
@@ -55,6 +56,11 @@ namespace Shooting
 
         void Shoot()
         {
+            if (muzzleFlashPrefab)
+            {
+                Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
+                Destroy(muzzleFlashPrefab, 0.1f);
+            }
             GameObject bullet = bulletPool[poolIndex];
             poolIndex++;
             if (poolIndex >= poolSize)

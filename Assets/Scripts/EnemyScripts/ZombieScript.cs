@@ -1,32 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class ZombieScript : MonoBehaviour
+namespace EnemyScripts
 {
-    public int maxHealth = 100; 
-    public int currentHealth;
-    [SerializeField] private Animator zombieAnimator;
-
-    void Start()
+    public class ZombieScript : MonoBehaviour
     {
-        currentHealth = maxHealth;
-    }
+        [SerializeField] private int maxHealth = 100; 
+        [SerializeField] private int currentHealth;
+        [SerializeField] private Animator zombieAnimator;
 
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage; 
-        if (currentHealth <= 0)
+        void Start()
         {
-            Die();
+            currentHealth = maxHealth;
         }
-    }
 
-    void Die()
-    {
-        zombieAnimator.enabled = false;
-        gameObject.GetComponent<BoxCollider>().enabled = false;
-        gameObject.GetComponent<RagdollController>().SetRigidBodiesKinematic(false);
-        //Destroy(gameObject); 
+        public void TakeDamage(int damage)
+        {
+            currentHealth -= damage; 
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
+        }
+
+        void Die()
+        {
+            zombieAnimator.enabled = false;
+            gameObject.GetComponent<BoxCollider>().enabled = false;
+            gameObject.GetComponent<RagdollController>().SetRigidBodiesKinematic(false);
+            gameObject.GetComponent<EnemyNavMeshController>().enabled = false;
+            gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            //Destroy(gameObject); 
+        }
     }
 }
