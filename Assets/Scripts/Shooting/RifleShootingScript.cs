@@ -13,6 +13,7 @@ namespace Shooting
         [SerializeField] private int poolSize = 20;
         [SerializeField] private int maxAmmo = 10;
         [SerializeField] private int ammmoQuantity = 150;
+        [SerializeField] private Animator playerAnimator;
         public AudioSource audioSource;
         public AudioClip shootSound;
         public AudioClip reloadSound;
@@ -45,8 +46,9 @@ namespace Shooting
                 nextFireTime = Time.time + fireRate;
             }
 
-            if (Input.GetKey(KeyCode.R) && ammoManager.GetCurrentAmmo() < maxAmmo)
+            if (Input.GetKey(KeyCode.R) && ammoManager.GetCurrentAmmo() < maxAmmo && !isReloading)
             {
+                isReloading = true;
                 StartCoroutine(ReloadCoroutine());
             }
         }
@@ -93,7 +95,9 @@ namespace Shooting
                 audioSource.clip = reloadSound;
                 audioSource.Play();
             }
-            yield return new WaitForSeconds(reloadTime); 
+            playerAnimator.SetBool("isReloading", true);
+            yield return new WaitForSeconds(reloadTime);
+            playerAnimator.SetBool("isReloading", false);
             Reload();
             isReloading = false;
         }
