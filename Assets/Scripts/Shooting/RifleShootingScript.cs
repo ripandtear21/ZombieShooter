@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Shooting
@@ -15,6 +16,8 @@ namespace Shooting
         [SerializeField] private int maxAmmo = 10;
         [SerializeField] private int ammmoQuantity = 150;
         [SerializeField] private Animator playerAnimator;
+        [SerializeField] private TextMeshProUGUI ammoText;
+        [SerializeField] private TextMeshProUGUI reloadText;
         public AudioSource audioSource;
         public AudioClip shootSound;
         public AudioClip reloadSound;
@@ -25,9 +28,12 @@ namespace Shooting
         private int poolIndex = 0;
         private bool isReloading = false;
         private float reloadTime = 2.3f;
+        private int currentAmmo;
 
         void Start()
         { 
+            reloadText.text = "Reloading...";
+            reloadText.enabled = false;
             bulletPool = new List<GameObject>();
             for (int i = 0; i < poolSize; i++)
             {
@@ -35,6 +41,8 @@ namespace Shooting
                 bullet.SetActive(false);
                 bulletPool.Add(bullet);
             }
+            currentAmmo = maxAmmo;
+            ammoText.text = currentAmmo.ToString() + "/" + ammmoQuantity.ToString();
             ammoManager = new AmmoManager(maxAmmo);
             AmmoManager.AddAmmo(ammmoQuantity);
         }
@@ -63,6 +71,7 @@ namespace Shooting
             }
             GameObject bullet = bulletPool[poolIndex];
             poolIndex++;
+            currentAmmo--;
             if (poolIndex >= poolSize)
             {
                 poolIndex = 0;
@@ -79,6 +88,7 @@ namespace Shooting
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
             rb.velocity = firePoint.forward * bulletSpeed;
             
+            ammoText.text = currentAmmo.ToString() + "/" + ammmoQuantity.ToString();
             bullet.GetComponent<Collider>().enabled = true;
             bullet.GetComponent<BulletScript>().OnBulletHit.AddListener(() => { bullet.SetActive(false); });
         }
@@ -101,6 +111,8 @@ namespace Shooting
                 audioSource.clip = reloadSound;
                 audioSource.Play();
             }
+            
+            reloadText.enabled = true;
             playerAnimator.SetBool("isReloading", true);
             yield return new WaitForSeconds(reloadTime);
             playerAnimator.SetBool("isReloading", false);
@@ -109,9 +121,12 @@ namespace Shooting
         }
         void Reload()
         {
+            reloadText.enabled = false;
             ammoManager.Reload();
             AmmoManager.ReduceAmmo(poolIndex);
             ammmoQuantity = AmmoManager.TotalAmmo;
+            currentAmmo = maxAmmo;
+            ammoText.text = maxAmmo.ToString() + "/" + ammmoQuantity.ToString();
             ResetBullets();
         }
     }

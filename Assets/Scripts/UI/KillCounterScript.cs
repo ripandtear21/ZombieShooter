@@ -7,7 +7,8 @@ namespace UI
 {
     public class KillCounterScript : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI counterText; 
+        [SerializeField] private TextMeshProUGUI counterText;
+        [SerializeField] private TextMeshProUGUI finalCounterText;
         private int killCount;
 
         private void OnEnable()
@@ -24,6 +25,7 @@ namespace UI
         {
             killCount = 0;
             counterText.text = killCount.ToString();
+            finalCounterText.text = killCount.ToString();
         }
     
     
@@ -31,6 +33,7 @@ namespace UI
         {
             killCount++;
             counterText.text = killCount.ToString();
+            finalCounterText.text = "Killed " + killCount.ToString() + " Zombies";
         }
     }
 }

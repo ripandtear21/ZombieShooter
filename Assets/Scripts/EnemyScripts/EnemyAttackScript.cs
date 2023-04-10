@@ -7,7 +7,10 @@ namespace EnemyScripts
     {
         [SerializeField] private float attackDistance = 1.5f;
         [SerializeField] private float attackDamage = 50f; 
-        [SerializeField] private float attackRate = 1f; 
+        [SerializeField] private float attackRate = 1f;
+        
+        [SerializeField] private AudioClip attackSound;  
+        [SerializeField] private AudioSource audioSource;
 
         private Animator anim; 
         private Transform player; 
@@ -15,6 +18,7 @@ namespace EnemyScripts
         private float nextAttackTime; 
 
         void Awake() {
+            audioSource.clip = attackSound;
             anim = GetComponent<Animator>(); 
             player = GameObject.FindGameObjectWithTag("Player").transform; 
         }
@@ -26,6 +30,7 @@ namespace EnemyScripts
                 playerInRange = true;
                 if (Time.time > nextAttackTime) {
                     Invoke("Attack", 0.5f);
+                    audioSource.Play();
                     anim.SetTrigger("attack");
                     nextAttackTime = Time.time + attackRate;
                 }

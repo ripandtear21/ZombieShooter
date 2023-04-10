@@ -9,7 +9,9 @@ public class PlayerHealth : MonoBehaviour
 {
     public Slider healthSlider; 
     public float startingHealth = 100f; 
-    public float currentHealth; 
+    public float currentHealth;
+    [SerializeField] private AudioClip deathSound;  
+    [SerializeField] private AudioSource audioSource;
 
     private void OnEnable()
     {
@@ -39,6 +41,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        audioSource.clip = deathSound;
+        audioSource.Play();
         EventManager.PlayerDeath();
     }
     void UpdateHealthSlider()
