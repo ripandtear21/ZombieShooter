@@ -53,6 +53,8 @@ MonoBehaviour:
   OnBulletHit:
     m_PersistentCalls:
       m_Calls: []
+  damagePerShot: 30
+  particleEffect: {fileID: 100000, guid: f06e78284f831ae469c74624ab5d513b, type: 3}
 --- !u!96 &8402419310786743086
 TrailRenderer:
   serializedVersion: 2
@@ -116,7 +118,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 0.85213405, b: 0.0037735105, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}

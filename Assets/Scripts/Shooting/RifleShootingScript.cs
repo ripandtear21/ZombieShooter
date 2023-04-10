@@ -59,7 +59,7 @@ namespace Shooting
             if (muzzleFlashPrefab)
             {
                 Instantiate(muzzleFlashPrefab, firePoint.position, firePoint.rotation);
-                Destroy(muzzleFlashPrefab, 0.1f);
+                //Destroy(muzzleFlashPrefab, 0.1f);
             }
             GameObject bullet = bulletPool[poolIndex];
             poolIndex++;

@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,7 @@ namespace EnemyScripts
 
         void Die()
         {
+            EventManager.ZombieDeath();
             zombieAnimator.enabled = false;
             gameObject.GetComponent<BoxCollider>().enabled = false;
             gameObject.GetComponent<RagdollController>().SetRigidBodiesKinematic(false);

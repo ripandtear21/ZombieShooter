@@ -11,5 +11,18 @@ namespace Managers
         {
             OnZombieDamage?.Invoke(damage);
         }
+        public static Action OnZombieDeath;
+        
+        public static void ZombieDeath()
+        {
+            OnZombieDeath?.Invoke();
+        }
+        public static Action OnPlayerDeath;
+        
+        public static void PlayerDeath()
+        {
+            OnPlayerDeath?.Invoke();
+        }
+        
     }
 }

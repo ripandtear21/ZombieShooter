@@ -39,8 +39,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        
-        //Destroy(gameObject);
+        EventManager.PlayerDeath();
     }
     void UpdateHealthSlider()
     {

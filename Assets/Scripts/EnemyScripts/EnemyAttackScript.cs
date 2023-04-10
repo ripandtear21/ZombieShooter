@@ -25,7 +25,8 @@ namespace EnemyScripts
             if (distance < attackDistance) {
                 playerInRange = true;
                 if (Time.time > nextAttackTime) {
-                    Attack();
+                    Invoke("Attack", 0.5f);
+                    anim.SetTrigger("attack");
                     nextAttackTime = Time.time + attackRate;
                 }
             }
@@ -35,7 +36,6 @@ namespace EnemyScripts
         }
         void Attack() {
             EventManager.ZombieDamage(attackDamage);
-            anim.SetTrigger("attack");
         }
     }
 }
